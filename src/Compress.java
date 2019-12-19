@@ -12,13 +12,13 @@ import java.util.Scanner;
 
 public class Compress {
 	
-	public Compress(String path) throws IOException {
-		HashMap<Character,Integer> hm=readFrequencies(path);
+	public Compress(String inputPath,String outputPath) throws IOException {
+		HashMap<Character,Integer> hm=readFrequencies(inputPath);
 		Node root=buildTree(hm);
 		HashMap<Character, String> codes=getCodes(root);
-		BufferedWriter writer=new BufferedWriter(new FileWriter("output.huf"));
+		BufferedWriter writer=new BufferedWriter(new FileWriter(outputPath));
 		writeCodes(writer, root, codes);
-		writefile(writer,path, codes);
+		writefile(writer,inputPath, codes);
 		writer.close();
 	}
 	public HashMap<Character, Integer> readFrequencies(String path) throws IOException{

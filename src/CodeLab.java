@@ -22,14 +22,8 @@ public class CodeLab {
 		char c='\r';
 		int x=(int) c;
 		 x=9;
-		//System.out.println((char)x);
-		//System.out.println(Integer.toBinaryString(x));
-		//System.out.println((char)Integer.parseInt(b,2));
-	//	byte[] bval = new BigInteger(b, 2).toByteArray();
-	//	System.out.println(Arrays.toString(bval));
-	//	System.out.println(b.substring(0,b.length()-3));
-	//	new Compress("input.txt");
-new Compress("input.txt");
+		 new Compress("input.txt","compressed.txt");
+		 new Decompress("compressed.txt", "decompressed.txt");
 	/*	BufferedReader br=null; 
 		
 		br = new BufferedReader(new FileReader("output.txt"));

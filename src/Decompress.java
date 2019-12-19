@@ -9,6 +9,12 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 public class Decompress {
+	public Decompress(String inputPath,String outputPath) throws IOException {
+		BufferedReader br=new BufferedReader(new FileReader(inputPath));
+		Node root=readCodes(br);
+		inorder(root,"");
+		output(br,root,outputPath);
+	}
 	
 	public static void buildNode(Node root,String code,int index,Character c) {
 		if(index==code.length()-1) {
@@ -32,7 +38,8 @@ public class Decompress {
 	Node root=new Node(0, null);
 	int padding=0;
 	String str=br.readLine();
-	while(br!=null) {
+	while(str!=null) {
+		System.out.println(str);
 		if(str.length()==1 && !str.equals("")) {
 			padding=Integer.parseInt(str);
 			break;
@@ -55,11 +62,11 @@ public class Decompress {
 		System.out.println(root.value+"  "+str);
 		inorder(root.right,str.concat("1"));
 	}
-	public static String output(BufferedReader br,Node root) throws IOException {
+	public static String output(BufferedReader br,Node root,String outputPath) throws IOException {
 		String str="";
 		int n;
 		n=br.read();
-		BufferedWriter bw=new BufferedWriter(new FileWriter("decompressed.txt"));
+		BufferedWriter bw=new BufferedWriter(new FileWriter(outputPath));
 		while(n!=-1) {
 			int n2=br.read();
 			String temp=String.format("%7s", Integer.toBinaryString(n)).replace(' ', '0');
@@ -101,12 +108,6 @@ public class Decompress {
 			return decode(bw,root,rootTemp.right,str,i+1,lastindex);
 
 	}
-	public static void main(String[] args) throws IOException {
-		BufferedReader br=new BufferedReader(new FileReader("output.huf"));
-		Node root=readCodes(br);
-		inorder(root,"");
-		output(br,root);
 
-	}
 
 }
