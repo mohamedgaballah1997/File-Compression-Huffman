@@ -44,7 +44,6 @@ public class Decompress {
 	str=br.readLine();
 	}
 	root.freq=padding;
-	System.out.println("++++++++"+padding);
 	return root;
 	}
 	
@@ -55,23 +54,29 @@ public class Decompress {
 		System.out.println((int)root.value+"  "+str);
 		inorder(root.right,str.concat("1"));
 	}
-	public static String output(String l,Node root) {
+	public static String output(BufferedReader br,Node root) throws IOException {
 		String str="";
 		String out="";
+		int n;
+		n=br.read();
 	//	l=l.substring(0,l.length()-root.freq);
-		for(int i=0;i<l.length();i++) {
-			int x=(int) l.charAt(i);
-			str=str.concat(Integer.toBinaryString(x));
+		while(n!=-1) {
+			
+			String temp=String.format("%8s", Integer.toBinaryString(n)).replace(' ', '0');
+			System.out.print(temp);
+			str=str.concat(temp);
+			n=br.read();
 		}
 		str=str.substring(0,str.length()-root.freq);
-		System.out.println(str);
+		
 		return out;
 	}
+	
 	public static void main(String[] args) throws IOException {
-		BufferedReader br=new BufferedReader(new FileReader("output.txt"));
+		BufferedReader br=new BufferedReader(new FileReader("output.huf"));
 		Node root=readCodes(br);
 		inorder(root,"");
-		output(br.readLine(),root);
+		String out=output(br,root);
 
 	}
 
