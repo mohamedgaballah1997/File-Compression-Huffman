@@ -1,5 +1,9 @@
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Decompress {
@@ -21,25 +25,26 @@ public class Decompress {
 		
 	}
 	
-	public static Node readCodes(Scanner sc) throws FileNotFoundException
+	public static Node readCodes(BufferedReader br) throws IOException
 	{
 	Node root=new Node(0, null);
 	int padding=0;
-	while(sc.hasNext()) {
-		String str=sc.nextLine();
+	String str=br.readLine();
+	while(br!=null) {
 		System.out.println(str);
-		String[] arr=str.split(" ");
-		if(arr.length==1 && !arr[0].equals("")) {
-			padding=Integer.parseInt(arr[0]);
+		if(str.length()==1 && !str.equals("")) {
+			padding=Integer.parseInt(str);
 			break;
 		}
-		if(arr.length==1)
-			buildNode(root,sc.nextLine().split(" ")[1], 0,'\n');
+		if(str.isEmpty())
+			buildNode(root,br.readLine().split(" ")[1], 0,'\n');
 			
-		else
-			buildNode(root,arr[1], 0,arr[0].charAt(0));
+		else 
+			buildNode(root,str.substring(2), 0,str.charAt(0));
+	str=br.readLine();
 	}
 	root.freq=padding;
+	System.out.println("++++++++"+padding);
 	return root;
 	}
 	
@@ -47,7 +52,7 @@ public class Decompress {
 		if(root==null) return;
 		inorder(root.left,str.concat("0"));
 		if(root.value!=null)
-		System.out.println(root.value+"  "+str);
+		System.out.println((int)root.value+"  "+str);
 		inorder(root.right,str.concat("1"));
 	}
 	public static String output(String l,Node root) {
@@ -62,11 +67,11 @@ public class Decompress {
 		System.out.println(str);
 		return out;
 	}
-	public static void main(String[] args) throws FileNotFoundException {
-		Scanner sc=new Scanner(new File("output.txt"));
-		Node root=readCodes(sc);
+	public static void main(String[] args) throws IOException {
+		BufferedReader br=new BufferedReader(new FileReader("output.txt"));
+		Node root=readCodes(br);
 		inorder(root,"");
-		output(sc.nextLine(),root);
+		output(br.readLine(),root);
 
 	}
 
