@@ -12,7 +12,7 @@ public class Decompress {
 	public Decompress(String inputPath,String outputPath) throws IOException {
 		BufferedReader br=new BufferedReader(new FileReader(inputPath));
 		Node root=readCodes(br);
-		inorder(root,"");
+	//	inorder(root,"");
 		output(br,root,outputPath);
 	}
 	
@@ -39,7 +39,6 @@ public class Decompress {
 	int padding=0;
 	String str=br.readLine();
 	while(str!=null) {
-		System.out.println(str);
 		if(str.length()==1 && !str.equals("")) {
 			padding=Integer.parseInt(str);
 			break;
@@ -96,7 +95,6 @@ public class Decompress {
 				bw.write(System.getProperty( "line.separator" ));
 			else
 				bw.write(rootTemp.value);
-			System.out.print(rootTemp.value);
 			return decode(bw,root,root,str,i,i-1);
 		}
 		

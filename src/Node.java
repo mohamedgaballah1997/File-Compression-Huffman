@@ -8,7 +8,7 @@ Node right;
 public Node(int freq,Character value) {
 	this.freq=freq;
 	this.value=value;
-	left=right=null;
+	left=right=null; 
 }
 @Override
 public int compareTo(Node n) {

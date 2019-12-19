@@ -57,8 +57,8 @@ public class Compress {
 		HashMap<Character, String> codes=new HashMap<>();
 		assign(codes, root, "");
 		for (Map.Entry<Character,String> entry : codes.entrySet())  {
-			System.out.println("Key = " + entry.getKey() + 
-                    ", Value = " + entry.getValue()); 
+		//	System.out.println("Key = " + entry.getKey() + 
+        //            ", Value = " + entry.getValue()); 
 		}
 		return codes;
 	}
@@ -80,7 +80,6 @@ public class Compress {
 		}
 		writer.write(padding.toString());
 		writer.write(System.getProperty( "line.separator" ));
-		System.out.println(str);
 		for(int i=0;i<str.length()/7;i++) {
 			int x=Integer.parseInt(str.substring(i*7,i*7+7),2);
 			writer.write((char) x);
