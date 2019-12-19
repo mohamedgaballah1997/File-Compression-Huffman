@@ -29,8 +29,6 @@ public class CodeLab {
 	//	System.out.println(Arrays.toString(bval));
 	//	System.out.println(b.substring(0,b.length()-3));
 	//	new Compress("input.txt");
-		 String str="jskfksg";
-		 System.out.println((char) 257);
 new Compress("input.txt");
 	/*	BufferedReader br=null; 
 		

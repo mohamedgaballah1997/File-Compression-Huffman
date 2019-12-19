@@ -11,6 +11,7 @@ import java.util.PriorityQueue;
 import java.util.Scanner;
 
 public class Compress {
+	
 	public Compress(String path) throws IOException {
 		HashMap<Character,Integer> hm=readFrequencies(path);
 		Node root=buildTree(hm);
@@ -65,6 +66,7 @@ public class Compress {
 	public static void writefile(BufferedWriter writer,String path,HashMap<Character, String> codes) throws IOException {
 		String str="";
 		BufferedReader br=new BufferedReader(new FileReader(path));
+		
 		int n;
 		n=br.read();
 		while(n!=-1) {
@@ -72,15 +74,15 @@ public class Compress {
 			str=str.concat(codes.get((char) n));
 			n=br.read();
 		}
-		Integer padding=(8-str.length()%8)%8;
+		Integer padding=(7-str.length()%7)%7;
 		for(int i=0;i<padding;i++) {
 			str=str.concat("0");
 		}
 		writer.write(padding.toString());
 		writer.write(System.getProperty( "line.separator" ));
 		System.out.println(str);
-		for(int i=0;i<str.length()/8;i++) {
-			int x=Integer.parseInt(str.substring(i*8,i*8+8),2);
+		for(int i=0;i<str.length()/7;i++) {
+			int x=Integer.parseInt(str.substring(i*7,i*7+7),2);
 			writer.write((char) x);
 		//	System.out.print(c);
 		}

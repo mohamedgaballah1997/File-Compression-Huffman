@@ -1,7 +1,9 @@
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Scanner;
@@ -31,7 +33,6 @@ public class Decompress {
 	int padding=0;
 	String str=br.readLine();
 	while(br!=null) {
-		System.out.println(str);
 		if(str.length()==1 && !str.equals("")) {
 			padding=Integer.parseInt(str);
 			break;
@@ -51,32 +52,60 @@ public class Decompress {
 		if(root==null) return;
 		inorder(root.left,str.concat("0"));
 		if(root.value!=null)
-		System.out.println((int)root.value+"  "+str);
+		System.out.println(root.value+"  "+str);
 		inorder(root.right,str.concat("1"));
 	}
 	public static String output(BufferedReader br,Node root) throws IOException {
 		String str="";
-		String out="";
 		int n;
 		n=br.read();
-	//	l=l.substring(0,l.length()-root.freq);
+		BufferedWriter bw=new BufferedWriter(new FileWriter("decompressed.txt"));
 		while(n!=-1) {
-			
-			String temp=String.format("%8s", Integer.toBinaryString(n)).replace(' ', '0');
-			System.out.print(temp);
+			int n2=br.read();
+			String temp=String.format("%7s", Integer.toBinaryString(n)).replace(' ', '0');
 			str=str.concat(temp);
-			n=br.read();
+		//	System.out.print(temp);
+			 if(n2==-1) {
+				 // n final char , shil el padding
+				 str=str.substring(0,str.length()-root.freq);
+				 decode(bw,root,root,str,0,0);
+				 break;
+			 }
+			int index=decode (bw,root,root, str,0,0);
+		//	System.out.println("++"+index);
+			if(index<str.length())
+				str=str.substring(index+1);
+			else
+				str="";
+			
+			n=n2;
 		}
-		str=str.substring(0,str.length()-root.freq);
-		
-		return out;
+		bw.close();
+		return str;
 	}
-	
+	public static int decode(BufferedWriter bw,Node root,Node rootTemp,String str,int i,int lastindex) throws IOException {	
+		if(rootTemp.left==null) {
+			if(rootTemp.value=='\n')
+				bw.write(System.getProperty( "line.separator" ));
+			else
+				bw.write(rootTemp.value);
+			System.out.print(rootTemp.value);
+			return decode(bw,root,root,str,i,i-1);
+		}
+		
+		if(i==str.length()) return lastindex;
+		else if(str.charAt(i)=='0') {
+			return decode(bw,root,rootTemp.left,str,i+1,lastindex);
+		}
+		else
+			return decode(bw,root,rootTemp.right,str,i+1,lastindex);
+
+	}
 	public static void main(String[] args) throws IOException {
 		BufferedReader br=new BufferedReader(new FileReader("output.huf"));
 		Node root=readCodes(br);
 		inorder(root,"");
-		String out=output(br,root);
+		output(br,root);
 
 	}
 
