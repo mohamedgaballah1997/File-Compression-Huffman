@@ -1,6 +1,5 @@
-import java.io.Serializable;
 
-public class Node implements Comparable<Node> , Serializable{
+public class Node implements Comparable<Node> {
 int freq;
 Integer value;
 Node left;

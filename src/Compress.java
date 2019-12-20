@@ -1,21 +1,13 @@
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.PriorityQueue;
-import java.util.Scanner;
 
 public class Compress {
 	
@@ -45,6 +37,7 @@ public class Compress {
 				hm.put(n,hm.get(n)+1);
 			n=br.read();
 		}
+		br.close();
 	return hm;
 	}
 	
@@ -64,16 +57,22 @@ public class Compress {
 		}
 		return heap.poll();
 	}
+	
 	public HashMap<Integer, String> getCodes(Node root){
 		HashMap<Integer, String> codes=new HashMap<>();
 		assign(codes, root, "");
-		for (Map.Entry<Integer,String> entry : codes.entrySet())  {
-		//	System.out.println("Key = " + entry.getKey() + 
-        //            ", Value = " + entry.getValue()); 
-		}
 		return codes;
 	}
-
+	public static void assign(HashMap<Integer, String> hm,Node root,String code) {
+		if(root.left==null) {
+			if(code.equals("")) code="0"; // handle only one char in all file
+			hm.put(root.value, code);
+		}
+		else {
+		assign(hm, root.left, code.concat("0"));
+		assign(hm, root.right, code.concat("1"));
+		}
+	}
 	public static void writefile( DataOutputStream writer,String path,HashMap<Integer, String> codes) throws IOException {
 		
 		DataInputStream br = new DataInputStream(new BufferedInputStream(new FileInputStream(path)));
@@ -94,7 +93,7 @@ public class Compress {
 			int x=Integer.parseInt(str.substring(i*8,i*8+8),2);
 			writer.write(x);
 		}
-		
+		br.close();
 		
 	}
 	public static void writeTree( DataOutputStream writer,Node root) throws IOException {
@@ -112,15 +111,6 @@ public class Compress {
 		writeTree(writer, root.right); 
 	}
 	
-	public static void assign(HashMap<Integer, String> hm,Node root,String code) {
-		if(root.left==null) {
-			if(code.equals("")) code="0"; // handle only one char in all file
-			hm.put(root.value, code);
-		}
-		else {
-		assign(hm, root.left, code.concat("0"));
-		assign(hm, root.right, code.concat("1"));
-		}
-	}
+
 	
 }
