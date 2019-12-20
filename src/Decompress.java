@@ -66,7 +66,6 @@ public class Decompress {
 				 break;
 			 }
 			int index=decode (bw,root,root, str,0,-1);
-		//	System.out.println("++"+index);
 			if(index!=-1) {
 			if(index<str.length())
 				str=str.substring(index+1);
@@ -80,6 +79,12 @@ public class Decompress {
 	}
 	public static int decode(DataOutputStream bw,Node root,Node rootTemp,String str,int i,int lastindex) throws IOException {	
 		if(rootTemp.left==null) {
+				
+				if(rootTemp==root) { 
+					if(i==str.length()) return lastindex;
+					bw.write(rootTemp.value);
+					return decode(bw,root,root,str,i+1,i);
+					}
 				bw.write(rootTemp.value);
 			return decode(bw,root,root,str,i,i-1);
 		}
