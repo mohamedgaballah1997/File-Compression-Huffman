@@ -100,7 +100,7 @@ public class Compress {
 	public static void writeTree( DataOutputStream writer,Node root) throws IOException {
 
 		if(root.left==null) {
-				writer.write(1);
+				writer.write(1) ;
 				writer.write(root.value);
 				
 				return;
