@@ -2,10 +2,10 @@ import java.io.Serializable;
 
 public class Node implements Comparable<Node> , Serializable{
 int freq;
-Character value;
+Integer value;
 Node left;
 Node right;
-public Node(int freq,Character value) {
+public Node(int freq,Integer value) {
 	this.freq=freq;
 	this.value=value;
 	left=right=null; 
