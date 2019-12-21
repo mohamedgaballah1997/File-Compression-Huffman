@@ -29,6 +29,9 @@ public class CodeLab {
 		System.out.println(s);  */
 		new CompressFolder("test","test.txt");
 		new DecompressFolder("test.txt","h");
+	//	File f=new File("H");
+//		f.mkdir();
+	//	DataOutputStream bw= new DataOutputStream(new BufferedOutputStream(new FileOutputStream("H/test.txt")));
 			
 		}
 	}
