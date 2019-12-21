@@ -17,8 +17,6 @@ public class DecompressFolder {
 		List<String> files=new ArrayList<String>();
 		List<Integer> lengths=new ArrayList<Integer>();
 		root.freq=readfileName(br, files, lengths,FolderName);
-		System.out.println(files);
-		System.out.println(lengths);
 		output(br,root,files,lengths);
 	}
 	public static int readfileName(DataInputStream br,List<String> files,List<Integer> lengths,String FolderName) throws IOException {

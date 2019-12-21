@@ -14,10 +14,17 @@ public class CompressFolder {
 public CompressFolder(String filePath,String outputPath) throws IOException {
 	File folder = new File(filePath);
 	File[] listOfFiles = folder.listFiles();
+	if(listOfFiles.length==0) {
+		System.out.println("Empty Folder");
+		return;
+	}
 	HashMap<Integer,Integer> hm=readFrequencies(listOfFiles);
 
 	Node root=buildTree(hm);
-	
+	if(root==null) {
+		System.out.println("Empty files in Folder");
+		return;
+	}
 	HashMap<Integer, String> codes=getCodes(root);
 	
 	DataOutputStream writer= new DataOutputStream(new BufferedOutputStream(new FileOutputStream(outputPath)));

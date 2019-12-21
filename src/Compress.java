@@ -15,7 +15,10 @@ public class Compress {
 		HashMap<Integer,Integer> hm=readFrequencies(inputPath);
 
 		Node root=buildTree(hm);
-		
+		if(root==null) {
+			System.out.println("Empty File");
+			return;
+		}
 		HashMap<Integer, String> codes=getCodes(root);
 		
 		DataOutputStream writer= new DataOutputStream(new BufferedOutputStream(new FileOutputStream(outputPath)));
