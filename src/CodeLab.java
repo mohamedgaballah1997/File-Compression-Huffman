@@ -1,43 +1,39 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.math.BigInteger;
-import java.nio.ByteBuffer;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Scanner;
 
 public class CodeLab {
 
-	public static void main(String[] args) throws IOException {
-		//Scanner sc = new Scanner(System.in);
-		//char b='\n';
-		//b=sc.next().charAt(0);
-		//System.out.println(b);
-		String b = "0001101";
-		char c='\r';
-		int x=(int) c;
-		 x=9;
-		 new Compress("input.txt","compressed.txt");
-		 new Decompress("compressed.txt", "decompressed.txt");
-	/*	BufferedReader br=null; 
+	public static void main(String[] args) throws IOException  {
+	/*	DataOutputStream bw= new DataOutputStream(new BufferedOutputStream(new FileOutputStream("test.txt")));
+		String str="hids";
+		bw.writeInt(str.length());
+		bw.writeBytes(str);
+		bw.close();
+		DataInputStream br = new DataInputStream(new BufferedInputStream(new FileInputStream("test.txt")));
+		//int n=br.read();
+	
 		
-		br = new BufferedReader(new FileReader("output.txt"));
-		HashMap<Character, Integer> hm=new HashMap<>();
-		int n;
+		int n=br.readInt();
+		System.out.println(n);
+		byte[] b=new byte[n];
+		br.read(b);
+		String s=new String(b);
+		System.out.println(s);  */
 		
-		n=br.read();
-		while(n!=-1) {
+		new CompressFolder("test","test.txt");
+		new DecompressFolder("test.txt","h");
+	//	File f=new File("H");
+//		f.mkdir();
+	//	DataOutputStream bw= new DataOutputStream(new BufferedOutputStream(new FileOutputStream("H/test.txt")));
 			
-			System.out.println(n);
-			n=br.read();
-		}
-		*/
-		
 		}
 	}
 

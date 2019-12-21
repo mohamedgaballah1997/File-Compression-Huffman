@@ -1,47 +1,57 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.PriorityQueue;
-import java.util.Scanner;
 
 public class Compress {
 	
 	public Compress(String inputPath,String outputPath) throws IOException {
-		HashMap<Character,Integer> hm=readFrequencies(inputPath);
+		HashMap<Integer,Integer> hm=readFrequencies(inputPath);
+
 		Node root=buildTree(hm);
-		HashMap<Character, String> codes=getCodes(root);
-		BufferedWriter writer=new BufferedWriter(new FileWriter(outputPath));
-		writeCodes(writer, root, codes);
+		if(root==null) {
+			System.out.println("Empty File");
+			return;
+		}
+		HashMap<Integer, String> codes=getCodes(root);
+		
+		DataOutputStream writer= new DataOutputStream(new BufferedOutputStream(new FileOutputStream(outputPath)));
+		
+		writeTree(writer, root);
+	
 		writefile(writer,inputPath, codes);
 		writer.close();
+		System.out.println("File is successfully compressed"); 
+		
+		
 	}
-	public HashMap<Character, Integer> readFrequencies(String path) throws IOException{
-		BufferedReader br=new BufferedReader(new FileReader(path));
-		HashMap<Character, Integer> hm=new HashMap<>();
+	public HashMap<Integer, Integer> readFrequencies(String path) throws IOException{
+		DataInputStream br = new DataInputStream(new BufferedInputStream(new FileInputStream(path)));
+		HashMap<Integer, Integer> hm=new HashMap<>();
 		int n;
 		n=br.read();
 		while(n!=-1) {
-			if(n==13) n=br.read(); //new line
-			if(!hm.containsKey((char) n))
-				hm.put((char) n, 1);
+			if(!hm.containsKey( n))
+				hm.put( n, 1);
 			else
-				hm.put((char) n,hm.get((char) n)+1);
+				hm.put(n,hm.get(n)+1);
 			n=br.read();
-			System.out.println("++++++++++++"+n);
 		}
 		br.close();
 	return hm;
 	}
 	
-	public Node buildTree(HashMap<Character,Integer> hm) {
+	public Node buildTree(HashMap<Integer,Integer> hm) {
 		PriorityQueue<Node> heap=new PriorityQueue<>();
-		for (Map.Entry<Character,Integer> entry : hm.entrySet())  {
+		for (Map.Entry<Integer,Integer> entry : hm.entrySet())  {
 			Node node=new Node(entry.getValue(), entry.getKey());
 			heap.add(node);
 		}
@@ -55,70 +65,13 @@ public class Compress {
 		}
 		return heap.poll();
 	}
-	public HashMap<Character, String> getCodes(Node root){
-		HashMap<Character, String> codes=new HashMap<>();
+	
+	public HashMap<Integer, String> getCodes(Node root){
+		HashMap<Integer, String> codes=new HashMap<>();
 		assign(codes, root, "");
-		for (Map.Entry<Character,String> entry : codes.entrySet())  {
-		//	System.out.println("Key = " + entry.getKey() + 
-        //            ", Value = " + entry.getValue()); 
-		}
 		return codes;
 	}
-
-	public static void writefile(BufferedWriter writer,String path,HashMap<Character, String> codes) throws IOException {
-		String str="";
-		BufferedReader br=new BufferedReader(new FileReader(path));
-		
-		int n;
-		n=br.read();
-		while(n!=-1) {
-			if(n==13) n=br.read();
-			str=str.concat(codes.get((char) n));
-			n=br.read();
-		}
-		Integer padding=(7-str.length()%7)%7;
-		for(int i=0;i<padding;i++) {
-			str=str.concat("0");
-		}
-		writer.write(padding.toString());
-		writer.write(System.getProperty( "line.separator" ));
-		System.out.println(str);
-		for(int i=0;i<str.length()/7;i++) {
-			int x=Integer.parseInt(str.substring(i*7,i*7+7),2);
-			writer.write((char) x);
-		//	System.out.print(c);
-		}
-		
-		
-	}
-	public static void writeCodes( BufferedWriter writer,Node root,HashMap<Character, String> codes) throws IOException {
-		if(root.left==null) {
-				writer.write(root.value + " "+codes.get(root.value));
-				writer.write(System.getProperty( "line.separator" ));
-			}
-		else {
-			writeCodes(writer, root.left,codes);
-			writeCodes(writer, root.right,codes); 
-		}
-	}
-	public static void writeTree( BufferedWriter writer,Node root) throws IOException {
-
-		if(root==null) {
-			writer.write("-2 ");
-			
-		}
-		if(root.left==null) {
-				writer.write(root.value + " ");
-				return;
-			}
-		else {
-			writer.write("-1 ");
-		}
-		writeTree(writer, root.left);
-		writeTree(writer, root.right); 
-	}
-	
-	public static void assign(HashMap<Character, String> hm,Node root,String code) {
+	public static void assign(HashMap<Integer, String> hm,Node root,String code) {
 		if(root.left==null) {
 			if(code.equals("")) code="0"; // handle only one char in all file
 			hm.put(root.value, code);
@@ -128,5 +81,44 @@ public class Compress {
 		assign(hm, root.right, code.concat("1"));
 		}
 	}
+	public static void writefile( DataOutputStream writer,String path,HashMap<Integer, String> codes) throws IOException {
+		
+		DataInputStream br = new DataInputStream(new BufferedInputStream(new FileInputStream(path)));
+		StringBuilder str=new StringBuilder("");
+		int n;
+		n=br.read();
+		while(n!=-1) {
+			
+			str=str.append(codes.get(n));
+			n=br.read();
+		}
+		Integer padding=(8-str.length()%8)%8;
+		for(int i=0;i<padding;i++) {
+			str=str.append("0");
+		}
+		writer.write(padding);
+		for(int i=0;i<str.length()/8;i++) {
+			int x=Integer.parseInt(str.substring(i*8,i*8+8),2);
+			writer.write(x);
+		}
+		br.close();
+		
+	}
+	public static void writeTree( DataOutputStream writer,Node root) throws IOException {
+
+		if(root.left==null) {
+				writer.write(1) ;
+				writer.write(root.value);
+				
+				return;
+			}
+		else {
+			writer.write(0);
+		}
+		writeTree(writer, root.left);
+		writeTree(writer, root.right); 
+	}
+	
+	
 	
 }

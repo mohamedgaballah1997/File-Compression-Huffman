@@ -2,18 +2,38 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
-public class Decompress {
-	public Decompress(String inputPath,String outputPath) throws IOException {
+public class DecompressFolder {
+	public DecompressFolder(String inputPath,String FolderName) throws IOException {
 		DataInputStream br= new DataInputStream(new BufferedInputStream(new FileInputStream(inputPath)));
 		Node root=readTree(br);
-	//	inorder(root,"");
-		output(br,root,outputPath);
+		List<String> files=new ArrayList<String>();
+		List<Integer> lengths=new ArrayList<Integer>();
+		root.freq=readfileName(br, files, lengths,FolderName);
+		output(br,root,files,lengths);
 	}
-	
+	public static int readfileName(DataInputStream br,List<String> files,List<Integer> lengths,String FolderName) throws IOException {
+		File f=new File(FolderName);
+		f.mkdir();
+		FolderName=FolderName.concat("/");
+		int n=br.readInt();
+		for(int i=0;i<n;i++) {
+			int l=br.readInt();
+			byte[] b=new byte[l];
+			br.read(b);
+			files.add(FolderName.concat(new String(b)));
+			lengths.add(br.readInt());
+		}
+		return br.read();
+		
+	}
 	public static Node buildTree(DataInputStream br) throws IOException {
 		int n=br.read();
 		if(n==1) {
@@ -31,22 +51,16 @@ public class Decompress {
 	public static Node readTree(DataInputStream br) throws IOException
 	{
 	Node root=buildTree(br);
-	root.freq=br.read();
 	return root;
 	}
-	
-	public static void inorder(Node root,String str) {
-		if(root==null) return;
-		inorder(root.left,str.concat("0"));
-		if(root.value!=null)
-		System.out.println(root.value+"  "+str);
-		inorder(root.right,str.concat("1"));
-	}
-	public static String output(DataInputStream br,Node root,String outputPath) throws IOException {
+
+	public static String output(DataInputStream br,Node root,List<String> files,List<Integer> lengths) throws IOException {
 		String str="";
 		int n;
 		n=br.read();
-		DataOutputStream bw= new DataOutputStream(new BufferedOutputStream(new FileOutputStream(outputPath)));
+		int fileIndex=0;
+		int counter=0;
+		DataOutputStream bw= new DataOutputStream(new BufferedOutputStream(new FileOutputStream(files.get(fileIndex))));
 		while(n!=-1) {
 			int n2=br.read();
 			String temp=String.format("%8s", Integer.toBinaryString(n)).replace(' ', '0');
@@ -58,12 +72,22 @@ public class Decompress {
 				 break;
 			 }
 			int index=decode (bw,root,root, str,0,-1);
-			if(index!=-1) {
+			while(index!=-1) {
+			 counter++;
+			 if(counter==lengths.get(fileIndex)) {
+				 bw.close();
+				bw= new DataOutputStream(new BufferedOutputStream(new FileOutputStream(files.get(++fileIndex))));
+				counter=0;
+					
+			 }
 			if(index<str.length())
 				str=str.substring(index+1);
 			else
 				str="";
+		
+			index=decode (bw,root,root, str,0,-1);
 			}
+			
 			n=n2;
 		}
 		bw.close();
@@ -75,10 +99,10 @@ public class Decompress {
 				if(rootTemp==root) { 
 					if(i==str.length()) return lastindex;
 					bw.write(rootTemp.value);
-					return decode(bw,root,root,str,i+1,i);
+					return i;
 					}
 				bw.write(rootTemp.value);
-			return decode(bw,root,root,str,i,i-1);
+			return i-1;
 		}
 		
 		if(i==str.length()) return lastindex;
@@ -89,6 +113,5 @@ public class Decompress {
 			return decode(bw,root,rootTemp.right,str,i+1,lastindex);
 
 	}
-
 
 }
