@@ -28,7 +28,7 @@ public class MenuFrame {
       btnCompressAFile.addActionListener(new ActionListener() {
       	public void actionPerformed(ActionEvent arg0) {
       		 try {
-				fd.getFileName();
+				fd.getFileName(false,false);
 				// 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -60,6 +60,12 @@ public class MenuFrame {
       JButton btnDecompressAFile = new JButton("Decompress a File");
       btnDecompressAFile.addActionListener(new ActionListener() {
       	public void actionPerformed(ActionEvent arg0) {
+      		try {
+				fd.getFileName(true, false);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
       	}
       });
       btnDecompressAFile.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -69,7 +75,12 @@ public class MenuFrame {
       JButton btnDecompressAFolder = new JButton("Decompress a Folder\r\n");
       btnDecompressAFolder.addActionListener(new ActionListener() {
       	public void actionPerformed(ActionEvent arg0) {
-      		
+      		try {
+				fd.getFileName(true, true);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
       	}
       });
       btnDecompressAFolder.setFont(new Font("Tahoma", Font.PLAIN, 14));
