@@ -76,9 +76,8 @@ public class DecompressFolder {
 			 while(counter==lengths.get(fileIndex)) {
 				 bw.close();
 				bw= new DataOutputStream(new BufferedOutputStream(new FileOutputStream(files.get(++fileIndex))));
-				
 				counter=0;
-				if(fileIndex==lengths.size()-1) break;
+					
 			 }
 			if(index<str.length())
 				str=str.substring(index+1);
