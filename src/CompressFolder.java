@@ -27,16 +27,12 @@ public CompressFolder(String filePath,String outputPath) throws IOException {
 	}
 	HashMap<Integer, String> codes=getCodes(root);
 	
-	//print table:
-	printTableTrace(hm, codes);
-	
 	DataOutputStream writer= new DataOutputStream(new BufferedOutputStream(new FileOutputStream(outputPath)));
 	
 	writeTree(writer, root);
 
 	writefile(writer,listOfFiles, codes);
 	writer.close();
-	 System.out.println("Folder is successfully compressed"); 
 }
 public HashMap<Integer, Integer> readFrequencies(File[] listOfFiles) throws IOException{
 	HashMap<Integer, Integer> hm=new HashMap<>();
@@ -127,19 +123,5 @@ public static void writefile( DataOutputStream writer,File[] listOfFiles,HashMap
 		int x=Integer.parseInt(str.substring(i*8,i*8+8),2);
 		writer.write(x);
 	}
-}
-
-public void printTableTrace(HashMap<Integer,Integer> hm, HashMap<Integer,String> cod)
-{
-	int val;
-	
-	System.out.println("Byte\tCode\t\tNew Code\n");
-	
-	for (Map.Entry<Integer,Integer> entry : hm.entrySet())
-	{
-		val=entry.getKey();
-		System.out.println(val+"\t"+Integer.toBinaryString(val)+"\t\t"+ cod.get(val)+"\n");
-	}
-	
 }
 }

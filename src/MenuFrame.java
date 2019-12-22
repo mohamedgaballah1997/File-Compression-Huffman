@@ -31,8 +31,7 @@ public class MenuFrame {
 				fd.getFileName(false,false);
 				// 
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.out.println("Error, Choose a correct file");
 			}
     
       	}
@@ -47,8 +46,7 @@ public class MenuFrame {
       		try {
 				fd.getFilesNames();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.out.println("Error, Choose a correct file");
 			}
       	}
       });
@@ -63,8 +61,7 @@ public class MenuFrame {
       		try {
 				fd.getFileName(true, false);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.out.println("Error, Choose a correct file");
 			}
       	}
       });
@@ -78,8 +75,7 @@ public class MenuFrame {
       		try {
 				fd.getFileName(true, true);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			System.out.println("Error, Choose a correct file");
 			}
       	}
       });
